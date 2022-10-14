@@ -21,6 +21,7 @@ select * from iisc_cinema_sorting_target;
 
 ----------------------------
 -------------------------------------------
+---hospital table (parent)---
 CREATE TABLE hospitals (
 	hID int  primary key ,
 	h_name varchar(80) NOT NULL,
@@ -30,7 +31,7 @@ CREATE TABLE hospitals (
 	
 );
 
-
+-----depatment table(child table1)--
 CREATE TABLE department (
 	dID int  PRIMARY KEY ,
 	dr_name varchar(30)  ,
@@ -42,7 +43,7 @@ CREATE TABLE department (
     
 );
 
-
+----patient table(child table2)--
 CREATE TABLE patients (
 	pID int primary key,
 	p_name varchar(30) ,
@@ -55,12 +56,16 @@ CREATE TABLE patients (
 
 );
 
+----select---
+
 select * from hospitals ;
 select * from department ;
 select * from patients;
 
 
+----inserting values into 3-tables-----
 
+---inserting values into hospital table--
 insert into hospitals
 values (1,'Bowring hospital','Shivajinagar bus stand Cantonment',' Bangalore',9678930216),
 (2,'Mallya Hospital','Vittal Mallya Road','Bangalore',7865432109),
@@ -73,7 +78,7 @@ values (1,'Bowring hospital','Shivajinagar bus stand Cantonment',' Bangalore',96
 (9,'Columbia Asia Hospital',' palace road','Mysore',9988888510),
 (10,'Columbia Asia Hospital',' yashwanthpur main road','Bangalore',9456343010);
 
-
+---inserting values into department table--
 
 insert into department 
 values(100,'dr.shreya',6362986187,'Bangalore',44,'ENT',1),
@@ -93,7 +98,7 @@ values(100,'dr.shreya',6362986187,'Bangalore',44,'ENT',1),
 
 
 
-
+---inserting values into patient table--
 
 
 
@@ -139,6 +144,8 @@ insert into patients values(301,'Param','Bangalore',8765489034,33,1,100),
 
 
 ----------------joins--------------
+
+
 ---INNER JOIN---
 Select H.hID,H.h_name,H.h_location ,D.dID,D.dr_name,D.dept_name,P.pID,P.p_name
 from hospitals H
@@ -178,8 +185,8 @@ ON H.hID =D.hID
 FULL JOIN patients P as N_PATI
 on D.dID =P.dID ;
 
---------
-------------------------------------------------------------------VIEWS------------------------
+
+---------------------------------------VIEWS--------------------------------------------------
 
 ---no of patients visited  defined cities----
 CREATE view same_cities as
@@ -188,14 +195,14 @@ group by p_location
 having p_location ='Mangalore' or p_location='Bangalore' or p_location ='Delhi';
 
 
--- dbo.dr_nocheckup source
+-- dr who had no check up on any patients----
 
 create view dr_nocheckup as
 select D.dID,D.dr_name,D.dept_name,P.pID
 from patients P
 right join department D on D.dID=P.dID where P.pID is NULL;
 
------full join------------------
+-----views for full join------------------
 
 create view full_join as
 Select H.hID,H.h_name,D.dID,D.dr_name,D.dept_name,P.pID,P.p_name
@@ -205,14 +212,14 @@ ON H.hID =D.hID
 full JOIN patients P 
 on D.dID =P.dID;
 
--------left join-----
+-------view for left join-----
 create view  left_join as
 Select H.hID,H.h_name,D.dID,D.dr_name,D.dept_name
 from hospitals H
 left join department D
 ON H.hID =D.hID ;
 
-----patient who had check up more than once----
+----patient who had a check up more than once----
 
 CREATE view multiple_checkup_patients as
 select p_name ,count(pID) as repeated from patients group by p_name 
