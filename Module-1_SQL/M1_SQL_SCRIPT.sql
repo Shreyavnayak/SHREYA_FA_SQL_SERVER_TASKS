@@ -42,6 +42,7 @@ CREATE TABLE department (
     
 );
 
+
 CREATE TABLE patients (
 	pID int primary key,
 	p_name varchar(30) ,
